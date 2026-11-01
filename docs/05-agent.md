@@ -1,6 +1,6 @@
 # GTM Agent 구조
 
-찾기 → 매칭 → 초안 → 점수 → 게시 또는 사람 대기열 → 측정. 표준 라이브러리만 쓴다.
+찾기 → 매칭 → 초안 → 검수 → 질문 적합성 관문 → 사람 승인 → 게시 보호 장치 → 측정. 표준 라이브러리만 쓴다.
 
 ## 모듈
 
@@ -16,7 +16,15 @@
 | `agent/discover.py` | 네이버 검색 API(카페글·지식iN), 카카오 다음 검색 API로 최근 질문 후보를 찾는다 |
 | `agent/queue.py` | 후보 큐(`data/queue.csv`), 점수, 중복 제거, 상태 기록 |
 | `agent/poster.py` | Aside 브라우저로 네이버 카페 댓글 게시. 등록 후 되읽어 확인, 실패하면 사람에게 |
-| `agent/pipeline.py` | 위를 한 번에 돌리는 `run`. 하루 상한·규칙 allowlist·게시 스위치를 여기서 지킨다 |
+| `agent/pipeline.py` | 검색 API 기반 `run`. 하루 상한·규칙 allowlist·게시 스위치를 여기서 지킨다 |
+| `agent/board.py` | 가입한 카페 게시판의 최신·인기 글을 읽어 동시 처리(6)로 후보를 만든다. 가격형·링크형·허브형·지역조회형, `--retry` |
+| `agent/reader.py` | 로그인된 Aside로 카페 글 원문·기존 댓글·댓글 권한·가입 여부를 읽는다(삭제·미가입·등급 제한 글은 검수 전에 뺀다) |
+| `agent/judge.py` | Claude 판정(Haiku)·추출(Sonnet)·초안(Sonnet)·검수(Opus+Sonnet)·질문 적합성 채점(Opus) |
+| `agent/claude.py` | Messages API 호출과 지출 기록(하루 $8 · 총 $98 상한) |
+| `agent/guard.py` | 게시 직전 보호 장치: 카페별 하루 2건 · 20분 간격 · 링크 중복 차단 · 관계 공개 필수 |
+| `agent/outcomes.py` | 올린 댓글의 유지·답글·원글 작성자 반응을 분자/분모로 센다 |
+| `agent/shortlink.py` | 리블의 기존 비교 단축 링크(`/c/키`) |
+| `agent/review_eval.py` | 검수 평가 세트 실행(사례는 로컬) |
 
 ## 점수
 
@@ -41,7 +49,7 @@
 
 ```mermaid
 flowchart TD
-  R["ready 후보"] --> P{"--publish 켬?<br/>오늘 3건 미만?"}
+  R["ready 후보"] --> P{"사람 승인 + 게시 스위치?<br/>보호 장치 통과?"}
   P -- 아니오 --> H["human: 초안과 링크를 사람에게"]
   P -- 예 --> A["Aside로 댓글 입력·등록"]
   A --> V{"화면에 우리 문장이 보이나?"}

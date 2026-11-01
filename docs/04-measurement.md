@@ -37,6 +37,6 @@
 
 ## 판독 일정
 
-- 매일 아침 [results/daily-log.md](../results/daily-log.md)에 전날 숫자를 적는다.
-- GA는 최근 1~2일 값을 늦게 채운다(10/23 세션 시간 60.6초 → 재조회 85.1초). 최근 1~2일로 추세를 말하지 않고, 최종 판독은 D9에 한다.
-- 실행: `python analysis/ga_report.py --start 2026-10-24 --end 2026-10-30`
+- 매일의 본 것·바꾼 것은 [루프 기록](07-loop-log.md)에, 최종 지표(분자/분모 포함)는 [품질·신뢰 지표](09-quality-trust-metrics.md)에 적는다.
+- GA는 최근 1~2일 값을 늦게 채운다(10/23 세션 시간 60.6초 → 재조회 85.1초). 최근 1~2일로 추세를 말하지 않고, 최종 판독은 집계 마감(10/31 18:00) 직전에 하고, GA 지연분은 이후 갱신한다.
+- 실행: `python analysis/ga_report.py --start 2026-10-24 --end 2026-10-31`(전체) · `python analysis/ga_persistence.py`(댓글별 D0~D5)
