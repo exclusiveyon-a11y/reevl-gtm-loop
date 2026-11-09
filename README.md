@@ -1,5 +1,7 @@
 # REEVL GTM Loop
 
+[![GTM Agent 관제 콘솔 데모 — 질문 발견 → 판정 → 단지 매칭 → 사람 확인 대기 (예시 데이터, 19초 · 누르면 MP4)](docs/media/demo.gif)](docs/media/console.mp4)
+
 **부동산 질문에 데이터로 먼저 답하는 AI + 사람 승인 루프**
 
 [Clone Loop Day in Seoul](https://luma.com/a1bags64) (2026-10-24, NAVER D2SF · Agentic GTM) 출품작 · 서비스 https://reevl.co.kr
